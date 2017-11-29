@@ -30,13 +30,13 @@ public class Main {
 	         
 		    	System.out.println( "CarID = " + id );
 		    	System.out.println( "VIN = " + vin );
-			    System.out.println( "MAKE = " + make );
-			    System.out.println( "MODEL = " + model );
-			    System.out.println( "YEAR = " + year );
-			    System.out.println( "COLOR = " + color );
-			    System.out.println( "PRICE = " + price );
-			    System.out.println( "FORSALE = " + forsale );
-			    System.out.println();
+			System.out.println( "MAKE = " + make );
+			System.out.println( "MODEL = " + model );
+			System.out.println( "YEAR = " + year );
+			System.out.println( "COLOR = " + color );
+			System.out.println( "PRICE = " + price );
+			System.out.println( "FORSALE = " + forsale );
+			System.out.println();
 			}
       
 			rs.close();
