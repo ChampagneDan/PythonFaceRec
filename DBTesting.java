@@ -20,23 +20,23 @@ public class Main {
 			while ( rs.next() ) {
     		  
 				String id = rs.getString("CarID");
-	    		String  vin = rs.getString("VIN");
-	    		String  make = rs.getString("MAKE");
-	    		String  model = rs.getString("MODEL");
-	    		int  year = rs.getInt("YEAR");
-	    		String color = rs.getString("Color");
-	    		float price = rs.getFloat("PRICE");
-	    		boolean forsale = rs.getBoolean("FORSALE");
-	         
-		    	System.out.println( "CarID = " + id );
-		    	System.out.println( "VIN = " + vin );
-			System.out.println( "MAKE = " + make );
-			System.out.println( "MODEL = " + model );
-			System.out.println( "YEAR = " + year );
-			System.out.println( "COLOR = " + color );
-			System.out.println( "PRICE = " + price );
-			System.out.println( "FORSALE = " + forsale );
-			System.out.println();
+				String  vin = rs.getString("VIN");
+				String  make = rs.getString("MAKE");
+				String  model = rs.getString("MODEL");
+				int  year = rs.getInt("YEAR");
+				String color = rs.getString("Color");
+				float price = rs.getFloat("PRICE");
+				boolean forsale = rs.getBoolean("FORSALE");
+
+				System.out.println( "CarID = " + id );
+				System.out.println( "VIN = " + vin );
+				System.out.println( "MAKE = " + make );
+				System.out.println( "MODEL = " + model );
+				System.out.println( "YEAR = " + year );
+				System.out.println( "COLOR = " + color );
+				System.out.println( "PRICE = " + price );
+				System.out.println( "FORSALE = " + forsale );
+				System.out.println();
 			}
       
 			rs.close();
