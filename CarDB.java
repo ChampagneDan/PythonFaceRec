@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*; 
@@ -73,20 +74,28 @@ public class CarDB{
 	public static void addCar() {
 
 		JFrame frame = new JFrame("Add Car");
-		JLabel label = new JLabel("Add Car");
-			
+		JLabel CarIDTxt= new JLabel("Enter the VIN of the car (Must be unique).");	
+		JLabel MakeTxt= new JLabel("Enter the make of the car.");
+		JLabel ModelTxt= new JLabel("Enter the model of the car.");
+		JLabel YearTxt= new JLabel("Enter the year of the car.");
+		JLabel ColorTxt= new JLabel("Enter the color of the car.");
+		JLabel ListingPriceTxt= new JLabel("Enter the listing price(Format of: $00.00).");
+		JLabel ForsaleTxt= new JLabel("Select 'Yes' if the car is for sale, 'No' if otherwise.");
+		
+		String[] ComboBoxPatterns = {"Yes", "No"};
+		JComboBox ComboBox = new JComboBox(ComboBoxPatterns);
+		
 		JPanel panel = new JPanel();
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
+		
+		JTextField CarID,Make,Model,Year,Color,Price;
 			
-		JTextField CarID,Make,Model,Year,Color,Price,Forsale;
-			
-		CarID = new JTextField("Enter Car ID");
-		Make = new JTextField("Enter Make");
-		Model = new JTextField("Enter Model");
-		Year = new JTextField("Enter Year");
-		Color = new JTextField("Enter Color");
-		Price = new JTextField("Enter Listing Price");
-		Forsale = new JTextField("Forsale: Enter Yes or No"); 
+		CarID = new JTextField("");
+		Make = new JTextField("");
+		Model = new JTextField("");
+		Year = new JTextField("");
+		Color = new JTextField("");
+		Price = new JTextField("");
 		
 		CarID.setBounds(50,100, 200,30);  
 		Make.setBounds(50,100, 200,30);  
@@ -97,15 +106,21 @@ public class CarDB{
 		JButton Submit = new JButton();
 		Submit.setText("Submit");
 			
-		frame.getContentPane().add(label);
-		frame.getContentPane().add(CarID);
-		frame.getContentPane().add(Make);
-		frame.getContentPane().add(Model);
-		frame.getContentPane().add(Year);
-		frame.getContentPane().add(Color);
-		frame.getContentPane().add(Price);
-		frame.getContentPane().add(Forsale);
-		frame.getContentPane().add(Submit);
+		frame.add(CarIDTxt);
+		frame.add(CarID);
+		frame.add(MakeTxt);
+		frame.add(Make);
+		frame.add(ModelTxt);
+		frame.add(Model);
+		frame.add(YearTxt);
+		frame.add(Year);
+		frame.add(ColorTxt);
+		frame.add(Color);
+		frame.add(ListingPriceTxt);
+		frame.add(Price);
+		frame.add(ForsaleTxt);
+		frame.add(ComboBox);
+		frame.add(Submit);
 			
 		frame.add(panel);
 		frame.setSize(400, 400);
@@ -122,7 +137,7 @@ public class CarDB{
 				String YearInput =Year.getText(); 
 				String ColorInput =Color.getText(); 
 				String PriceInput =Price.getText();
-				String ForsaleInput = Forsale.getText();
+				String ForsaleInput = ComboBox.getSelectedItem().toString();
 					
 				try{
 					
@@ -153,19 +168,24 @@ public class CarDB{
 	public static void addEmployee() {
 
 		JFrame frame = new JFrame("Add Employee");
-		JLabel label = new JLabel("Add Employee");
-				
+		JLabel EmployeeIDTxt= new JLabel("Enter the employees ID(Must be unique).");
+		JLabel FirstNameTxt= new JLabel("Enter the employees first name.");
+		JLabel LastNameTxt= new JLabel("Enter the employees last name.");
+		JLabel DOBTxt= new JLabel("Enter the employees DOB.");
+		JLabel DateOfEmploymentTxt= new JLabel("Enter the date of employment.");
+		JLabel WageTxt= new JLabel("Enter the employees pay per hour.(Format: $00.00).");
+		
 		JPanel panel = new JPanel();
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
 				
 		JTextField EmployeeID,FirstName,LastName,DOB,DateOfEmployment,Wage;
 				
-		EmployeeID = new JTextField("Enter Employee ID");
-		FirstName = new JTextField("Enter First Name");
-		LastName = new JTextField("Enter Last Name");
-		DOB = new JTextField("Enter DOB");
-		DateOfEmployment = new JTextField("Enter Date Of Employment");
-		Wage = new JTextField("Enter Wage");
+		EmployeeID = new JTextField("");
+		FirstName = new JTextField("");
+		LastName = new JTextField("");
+		DOB = new JTextField("");
+		DateOfEmployment = new JTextField("");
+		Wage = new JTextField("");
 			
 				
 		EmployeeID.setBounds(50,100, 200,30);  
@@ -176,15 +196,20 @@ public class CarDB{
 				
 		JButton Submit = new JButton();
 		Submit.setText("Submit");
-				
-		frame.getContentPane().add(label);
-		frame.getContentPane().add(EmployeeID);
-		frame.getContentPane().add(FirstName);
-		frame.getContentPane().add(LastName);
-		frame.getContentPane().add(DOB);
-		frame.getContentPane().add(DateOfEmployment);
-		frame.getContentPane().add(Wage);
-		frame.getContentPane().add(Submit);
+		
+		frame.add(EmployeeIDTxt);
+		frame.add(EmployeeID);
+		frame.add(FirstNameTxt);
+		frame.add(FirstName);
+		frame.add(LastNameTxt);
+		frame.add(LastName);
+		frame.add(DOBTxt);
+		frame.add(DOB);
+		frame.add(DateOfEmploymentTxt);
+		frame.add(DateOfEmployment);
+		frame.add(WageTxt);
+		frame.add(Wage);
+		frame.add(Submit);
 				
 		frame.add(panel);
 		frame.setSize(400, 400);
@@ -231,18 +256,22 @@ public class CarDB{
 	public static void addCustomer() {
 
 		JFrame frame = new JFrame("Add Customer");
-		JLabel label = new JLabel("Add Customer");
-				
+		JLabel CustomerIDTxt= new JLabel("Enter the customers ID(Must be unique).");
+		JLabel FirstNameTxt= new JLabel("Enter the customers first name.");
+		JLabel LastNameTxt= new JLabel("Enter the customers last name.");
+		JLabel DOBTxt= new JLabel("Enter the customers DOB.");
+		JLabel PhoneNumberTxt= new JLabel("Enter the customers phone number(Format: 000-000-0000 ).");
+		
 		JPanel panel = new JPanel();
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
 				
 		JTextField CustomerID,FirstName,LastName,DOB,PhoneNumber;
 				
-		CustomerID = new JTextField("Enter CustomerID");
-		FirstName = new JTextField("Enter customers First Name");
-		LastName = new JTextField("Enter customers Last Name");
-		DOB = new JTextField("Enter customers DOB");
-		PhoneNumber = new JTextField("Enter customers Phone Number");
+		CustomerID = new JTextField("");
+		FirstName = new JTextField("");
+		LastName = new JTextField("");
+		DOB = new JTextField("");
+		PhoneNumber = new JTextField("");
 			
 		CustomerID.setBounds(50,100, 200,30);  
 		FirstName.setBounds(50,100, 200,30);  
@@ -253,13 +282,18 @@ public class CarDB{
 		JButton Submit = new JButton();
 		Submit.setText("Submit");
 				
-		frame.getContentPane().add(label);
-		frame.getContentPane().add(CustomerID);
-		frame.getContentPane().add(FirstName);
-		frame.getContentPane().add(LastName);
-		frame.getContentPane().add(DOB);
-		frame.getContentPane().add(PhoneNumber);
-		frame.getContentPane().add(Submit);
+		frame.add(CustomerIDTxt);
+		frame.add(CustomerID);
+		frame.add(FirstNameTxt);
+		frame.add(FirstName);
+		frame.add(LastNameTxt);
+		frame.add(LastName);
+		frame.add(DOBTxt);
+		frame.add(DOB);
+		frame.add(PhoneNumberTxt);
+		frame.add(PhoneNumber);
+		
+		frame.add(Submit);
 				
 		frame.add(panel);
 		frame.setSize(400, 400);
@@ -304,19 +338,24 @@ public class CarDB{
 	public static void addSale() {
 
 		JFrame frame = new JFrame("Add Sale");
-		JLabel label = new JLabel("Add Sale");
+		JLabel SaleIDTxt= new JLabel("Enter the saleID(MustBeUnique).");
+		JLabel CarIDTxt= new JLabel("Enter the cars VIN");
+		JLabel CustomerIDTxt= new JLabel("Enter the customers ID");
+		JLabel EmployeeIDTxt= new JLabel("Enter the employees ID");
+		JLabel DateOfSaleTxt= new JLabel("Enter the date of the sale.");
+		JLabel SalePriceTxt= new JLabel("Enter the sales price (Format: $00.00).");
 				
 		JPanel panel = new JPanel();
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
 				
 		JTextField SaleID,CarID,CustomerID,EmployeeID,DateOfSale,SalePrice;
 				
-		SaleID = new JTextField("Enter Sale ID");
-		CarID = new JTextField("Enter CarID");
-		CustomerID = new JTextField("Enter CustomerID");
-		EmployeeID = new JTextField("Enter EmployeeID");
-		DateOfSale = new JTextField("Enter Date Of Sale");
-		SalePrice = new JTextField("Enter Sale Price");
+		SaleID = new JTextField("");
+		CarID = new JTextField("");
+		CustomerID = new JTextField("");
+		EmployeeID = new JTextField("");
+		DateOfSale = new JTextField("");
+		SalePrice = new JTextField("");
 			
 				
 		SaleID.setBounds(50,100, 200,30);  
@@ -329,14 +368,19 @@ public class CarDB{
 		JButton Submit = new JButton();
 		Submit.setText("Submit");
 				
-		frame.getContentPane().add(label);
-		frame.getContentPane().add(SaleID);
-		frame.getContentPane().add(CarID);
-		frame.getContentPane().add(CustomerID);
-		frame.getContentPane().add(EmployeeID);
-		frame.getContentPane().add(DateOfSale);
-		frame.getContentPane().add(SalePrice);
-		frame.getContentPane().add(Submit);
+		frame.add(SaleIDTxt);
+		frame.add(SaleID);
+		frame.add(CarIDTxt);
+		frame.add(CarID);
+		frame.add(CustomerIDTxt);
+		frame.add(CustomerID);
+		frame.add(EmployeeIDTxt);
+		frame.add(EmployeeID);
+		frame.add(DateOfSaleTxt);
+		frame.add(DateOfSale);
+		frame.add(SalePriceTxt);
+		frame.add(SalePrice);
+		frame.add(Submit);
 				
 		frame.add(panel);
 		frame.setSize(400, 400);
@@ -380,7 +424,7 @@ public class CarDB{
 	
 	public static void main(String[] args) {
 		
-	  HomeView();
+		HomeView();
 		
 	}
 }
