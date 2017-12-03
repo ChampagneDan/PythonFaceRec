@@ -1,9 +1,75 @@
-
+import java.util.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*; 
 import java.sql.*;
 import javax.swing.BoxLayout;
+import javax.swing.table.DefaultTableModel;
+
+class Cars{
+	
+	String CarID;
+	String Make;
+	String Model;
+	int Year;
+	String Color;
+	String Price;
+	String ForSale;
+	
+	Cars(String CarID, String Make, String Model, int Year, String Color, String Price, String ForSale){
+		
+		this.CarID = CarID;
+		this.Make = Make;
+		this.Model = Model;
+		this.Year = Year;
+		this.Color = Color;
+		this.Price = Price;
+		this.ForSale = ForSale;
+		
+	}
+
+	public String getCarID() {
+		
+		return CarID;
+		
+	}
+	
+	public String getMake() {
+		
+		return Make;
+		
+	}
+
+	public String getModel() {
+	
+		return Model;
+	
+	}
+	
+	public int getYear() {
+		
+			return Year;
+		
+	}
+
+	public String getColor() {
+	
+		return Color;
+	
+	}
+	
+	public String getPrice() {
+		
+		return Price;
+	
+	}
+	
+	public String getForSale() {
+		
+		return ForSale;
+	
+	}
+}
 
 public class CarDB{
 	
@@ -66,6 +132,12 @@ public class CarDB{
 			
 			public void actionPerformed( ActionEvent e ){
 				addCustomer(); 
+	        }  
+		});
+		ViewDataBase.addActionListener(new ActionListener(){
+			
+			public void actionPerformed( ActionEvent e ){
+				viewCars(); 
 	        }  
 		});
 	}
@@ -149,6 +221,7 @@ public class CarDB{
 					
 					stmt.executeUpdate("INSERT INTO Cars(CarID,Make,Model,Year,Color,Price,Forsale) VALUES ('"+CarIDInput+"','"+MakeInput+"','"+ModelInput+"','"+YearInput+"','"+ColorInput+"','"+PriceInput+"','"+ForsaleInput+"')");	
 					
+					stmt.close();
 					con.close();
 
 				}
@@ -237,6 +310,7 @@ public class CarDB{
 						
 					stmt.executeUpdate("INSERT INTO Employees(EmployeeID,FirstName,LastName,DOB,DateOfEmployment,Wage) VALUES ('"+EmployeeIDInput+"','"+FirstNameInput+"','"+LastNameInput+"','"+DOBInput+"','"+DateOfEmploymentInput+"','"+WageInput+"')");	
 						
+					stmt.close();
 					con.close();
 
 				}
@@ -320,6 +394,7 @@ public class CarDB{
 						
 					stmt.executeUpdate("INSERT INTO Customers(CustomerID,FirstName,LastName,DOB,PhoneNumber) VALUES ('"+CustomerIDInput+"','"+FirstNameInput+"','"+LastNameInput+"','"+DOBInput+"','"+PhoneNumberInput+"')");	
 						
+					stmt.close();
 					con.close();
 
 				}
@@ -408,6 +483,7 @@ public class CarDB{
 						
 					stmt.executeUpdate("INSERT INTO Sales(SaleID,CarID,CustomerID,EmployeeID,DateOfSale,SalePrice) VALUES ('"+SaleIDInput+"','"+CarIDInput+"','"+CustomerIDInput+"','"+EmployeeIDInput+"','"+DateOfSaleInput+"','"+SalePriceInput+"')");	
 						
+					stmt.close();
 					con.close();
 
 				}
@@ -422,9 +498,79 @@ public class CarDB{
 		});
 	}
 	
+	public static void viewCars() {
+		
+		ArrayList<Cars> CarTable = new ArrayList<Cars>();
+		String column[]= {"CarID", "Make" ,"Model","Year","Color","Price","Forsale"};
+		
+		//Connect to db and get table values
+		try{
+			
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
+			System.out.println("Opened database successfully");
+			
+			stmt = con.createStatement();
+			
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM Cars;" );	
+			
+			while(rs.next()) {
+				
+				Cars car = new Cars(rs.getString("CarID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("Year"),
+									rs.getString("Color"),rs.getString("Price"),rs.getString("Forsale"));
+				
+				CarTable.add(car);
+				
+			}
+			
+			stmt.close();
+			con.close();
+
+		}
+				
+		catch ( Exception e ) {
+			    	  
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		 
+		}	
+			
+		JPanel panel = new JPanel();
+		JFrame frame = new JFrame("ViewDataBase");
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
+		
+		DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+		
+		JTable table = new JTable(tableModel);
+		
+		for (int i = 0; i < CarTable.size(); i++) {
+			
+			String CarID = CarTable.get(i).getCarID();
+			String Make = CarTable.get(i).getMake();
+			String Model = CarTable.get(i).getModel();
+			int Year = CarTable.get(i).getYear();
+			String Color = CarTable.get(i).getColor();
+			String Price = CarTable.get(i).getPrice();
+			String ForSale = CarTable.get(i).getForSale();
+			
+			Object[] data = { CarID, Make, Model, Year, 
+							  Color, Price, ForSale };
+			
+			tableModel.addRow(data);
+		}
+	
+		frame.add(new JScrollPane(table));
+		frame.add(panel);
+		frame.setSize(1000, 400);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
+	
 	public static void main(String[] args) {
 		
 		HomeView();
 		
 	}
 }
+
+
