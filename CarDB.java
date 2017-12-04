@@ -1,3 +1,7 @@
+//Dan Champagne
+//Carl Weber
+//Databases Project 
+
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -71,12 +75,99 @@ class Cars{
 	}
 }
 
+class CarsOwners{
+	
+	String CustomerID;
+	String FirstName;
+	String LastName;
+	String CarID;
+	String Make;
+	String Model;
+	int Year;
+	String Color;
+	String SalePrice;
+
+	
+	CarsOwners(String CustomerID, String FirstName, String LastName, 
+			   String CarID, String Make, String Model, 
+			   int Year, String Color, String SalePrice){
+		
+		this.CustomerID = CustomerID;
+		this.FirstName = FirstName;
+		this.LastName = LastName;
+		this.CarID = CarID;
+		this.Make = Make;
+		this.Model = Model;
+		this.Year = Year;
+		this.Color = Color;
+		this.SalePrice = SalePrice;
+		
+	}
+
+	public String getCustomerID() {
+		
+		return CustomerID;
+		
+	}
+
+	public String getFirstName() {
+		
+		return FirstName;
+		
+	}
+
+	public String getLastName() {
+		
+		return LastName;
+		
+	}
+
+	public String getCarID() {
+		
+		return CarID;
+		
+	}
+	
+	public String getMake() {
+		
+		return Make;
+		
+	}
+
+	public String getModel() {
+	
+		return Model;
+	
+	}
+	
+	public int getYear() {
+		
+			return Year;
+		
+	}
+
+	public String getColor() {
+	
+		return Color;
+	
+	}
+	
+	public String getSalePrice() {
+		
+		return SalePrice;
+	
+	}
+	
+}
+
 public class CarDB{
 	
 	static Connection con;
 	static Statement stmt;
 	
 	public static void HomeView(){
+		
+		String SortDefault = "All";
 		
 		JFrame frame = new JFrame("Home");
 		
@@ -90,12 +181,14 @@ public class CarDB{
 		JButton AddEmployee = new JButton();
 		JButton AddCustomer = new JButton();
 		JButton AddSale = new JButton();
+		JButton ViewCarsByOwner = new JButton();
 		
 		AddCar.setText("Add Car");
 		AddEmployee.setText("Add Employee");
 		AddSale.setText("Add Sale");
 		AddCustomer.setText("Add Customer");
-		ViewDataBase.setText("View Data Base");
+		ViewDataBase.setText("View Car Data Base");
+		ViewCarsByOwner.setText("View Car Data Base By Owner");
 		
 		frame.getContentPane().add(label);
 		frame.getContentPane().add(AddCar);
@@ -103,7 +196,8 @@ public class CarDB{
 		frame.getContentPane().add(AddCustomer);
 		frame.getContentPane().add(AddSale);
 		frame.getContentPane().add(ViewDataBase);
-
+		frame.getContentPane().add(ViewCarsByOwner);
+		
 		frame.add(panel);
 		frame.setSize(300,300);
 		frame.setLocationRelativeTo(null);
@@ -137,7 +231,13 @@ public class CarDB{
 		ViewDataBase.addActionListener(new ActionListener(){
 			
 			public void actionPerformed( ActionEvent e ){
-				viewCars(); 
+				viewCars(SortDefault); 
+	        }  
+		});
+		ViewCarsByOwner.addActionListener(new ActionListener(){
+			
+			public void actionPerformed( ActionEvent e ){
+				viewCarsByOwner(SortDefault); 
 	        }  
 		});
 	}
@@ -215,7 +315,6 @@ public class CarDB{
 					
 					Class.forName("org.sqlite.JDBC");
 					con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
-					System.out.println("Opened database successfully");
 					
 					stmt = con.createStatement();
 					
@@ -304,7 +403,6 @@ public class CarDB{
 						
 					Class.forName("org.sqlite.JDBC");
 					con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
-					System.out.println("Opened database successfully");
 						
 					stmt = con.createStatement();
 						
@@ -388,7 +486,6 @@ public class CarDB{
 						
 					Class.forName("org.sqlite.JDBC");
 					con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
-					System.out.println("Opened database successfully");
 						
 					stmt = con.createStatement();
 						
@@ -477,12 +574,13 @@ public class CarDB{
 						
 					Class.forName("org.sqlite.JDBC");
 					con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
-					System.out.println("Opened database successfully");
 						
 					stmt = con.createStatement();
 						
+					//Insert the new sale and update the 'Cars' table to set the sold cars 'Forsale' value to 'No'
 					stmt.executeUpdate("INSERT INTO Sales(SaleID,CarID,CustomerID,EmployeeID,DateOfSale,SalePrice) VALUES ('"+SaleIDInput+"','"+CarIDInput+"','"+CustomerIDInput+"','"+EmployeeIDInput+"','"+DateOfSaleInput+"','"+SalePriceInput+"')");	
-						
+					stmt.executeUpdate("UPDATE Cars SET Forsale = 'No' WHERE CarID = '"+CarIDInput+"'");	
+					
 					stmt.close();
 					con.close();
 
@@ -498,21 +596,34 @@ public class CarDB{
 		});
 	}
 	
-	public static void viewCars() {
+	public static void viewCars(String SortInput) {
 		
 		ArrayList<Cars> CarTable = new ArrayList<Cars>();
 		String column[]= {"CarID", "Make" ,"Model","Year","Color","Price","Forsale"};
+		String Query = null;
 		
 		//Connect to db and get table values
 		try{
 			
 			Class.forName("org.sqlite.JDBC");
 			con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
-			System.out.println("Opened database successfully");
 			
 			stmt = con.createStatement();
 			
-			ResultSet rs = stmt.executeQuery( "SELECT * FROM Cars;" );	
+			switch (SortInput) {
+				
+				case "All": Query = "SELECT * FROM Cars;";
+				break;
+			
+				case "Yes": Query = "SELECT * FROM Cars where ForSale is 'Yes';"; 	
+				break;
+				
+				case "No": 	Query = "SELECT * FROM Cars where ForSale is 'No';"; 	
+				break;
+			
+			} 
+			
+			ResultSet rs = stmt.executeQuery(Query);
 			
 			while(rs.next()) {
 				
@@ -536,12 +647,19 @@ public class CarDB{
 		}	
 			
 		JPanel panel = new JPanel();
-		JFrame frame = new JFrame("ViewDataBase");
+		JFrame frame = new JFrame("ViewCarDataBase");
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
 		
-		DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+		String[] ComboBoxPatterns = {"Yes", "No", "All"};
+		JComboBox SortByForSale = new JComboBox(ComboBoxPatterns);
 		
+		JLabel ComboBoxTxt= new JLabel("Sort by cars for sale. Select 'Yes','No' or 'All' then update.");
+		JButton Update = new JButton();
+		Update.setText("Update");
+		
+		DefaultTableModel tableModel = new DefaultTableModel(column, 0);
 		JTable table = new JTable(tableModel);
+		
 		
 		for (int i = 0; i < CarTable.size(); i++) {
 			
@@ -560,10 +678,107 @@ public class CarDB{
 		}
 	
 		frame.add(new JScrollPane(table));
+		frame.add(ComboBoxTxt);
+		frame.add(SortByForSale);
+		frame.add(Update);
 		frame.add(panel);
 		frame.setSize(1000, 400);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+		Update.addActionListener(new ActionListener(){
+			
+			public void actionPerformed( ActionEvent e ){
+				
+				String ComboBoxInput = SortByForSale.getSelectedItem().toString();
+				viewCars(ComboBoxInput); 
+				frame.dispose();
+	        }  
+		});
+	}
+	
+	public static void viewCarsByOwner(String Owner) {
+		
+		ArrayList<CarsOwners> CarOwnerTable = new ArrayList<CarsOwners>();
+		String column[]= {"OwnerID","FirstName","LastName","CarID", "Make" ,"Model","Year","Color","SalePrice"};
+		String Query = null;
+		
+		Query = "Select Customers.CustomerID,"
+				+ "Customers.FirstName,"
+				+ "Customers.LastName,"
+				+ "Cars.CarID,"
+				+ "Cars.Make,"
+				+ "Cars.Model,"
+				+ "Cars.Year,"
+				+ "Cars.Color,"
+				+ "Sales.SalePrice "
+				+ "from Customers "
+					+ "left join Sales "
+						+ "on Customers.CustomerID = Sales.CustomerID "
+					+ "left join cars "
+						+ "on Cars.CarID = Sales.CarID" ;
+		try{
+			
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
+			
+			stmt = con.createStatement();
+		
+			ResultSet rs = stmt.executeQuery(Query);
+		
+			while(rs.next()) {
+			
+				CarsOwners owner = new CarsOwners(rs.getString("CustomerID"),rs.getString("FirstName"),rs.getString("LastName"),
+												  rs.getString("CarID"),rs.getString("Make"),rs.getString("Model"),rs.getInt("Year"),
+												  rs.getString("Color"),rs.getString("SalePrice"));
+				
+				CarOwnerTable.add(owner);
+			
+			}
+
+			stmt.close();
+			con.close();
+
+		}
+			
+		catch ( Exception e ) {
+		    	  
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+	 
+		}	
+		
+		JPanel panel = new JPanel();
+		JFrame frame = new JFrame("ViewCarOwners");
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
+		
+		DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+		JTable table = new JTable(tableModel);
+		
+		for (int i = 0; i < CarOwnerTable.size(); i++) {
+			
+			String CustomerID = CarOwnerTable.get(i).getCustomerID();
+			String FirstName = CarOwnerTable.get(i).getFirstName();
+			String LastName = CarOwnerTable.get(i).getLastName();
+			String CarID = CarOwnerTable.get(i).getCarID();
+			String Make = CarOwnerTable.get(i).getMake();
+			String Model = CarOwnerTable.get(i).getModel();
+			int Year = CarOwnerTable.get(i).getYear();
+			String Color = CarOwnerTable.get(i).getColor();
+			String SalePrice = CarOwnerTable.get(i).getSalePrice();
+			
+			Object[] data = { CustomerID, FirstName, LastName, CarID, Make, Model, Year, 
+							  Color, SalePrice};
+			
+			tableModel.addRow(data);
+		}
+	
+		frame.add(new JScrollPane(table));
+		frame.add(panel);
+		frame.setSize(1000, 400);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		         
 	}
 	
 	public static void main(String[] args) {
@@ -572,5 +787,3 @@ public class CarDB{
 		
 	}
 }
-
-
