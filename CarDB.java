@@ -1,3 +1,4 @@
+
 //Dan Champagne
 //Carl Weber
 //Databases Project 
@@ -10,6 +11,116 @@ import java.sql.*;
 import javax.swing.BoxLayout;
 import javax.swing.table.DefaultTableModel;
 
+class Customers{
+	// CustomerID,FirstName,LastName,DOB,PhoneNumber
+	String CustomerID;
+	String FirstName;
+	String LastName;
+	String DOB;
+	String PhoneNumber;
+	
+	
+	Customers (String CustomerID, String FirstName , String LastName, String DOB, String PhoneNumber){
+		
+		this.CustomerID = CustomerID;
+		this.FirstName = FirstName;
+		this.LastName = LastName;
+		this.DOB = DOB;
+		this.PhoneNumber = PhoneNumber;
+		
+		
+		
+	}
+
+	public String getCustomerID() {
+		
+		return CustomerID;
+		
+	}
+	
+	public String getFirstName() {
+		
+		return FirstName;
+		
+	}
+
+	public String getLastName() {
+	
+		return LastName;
+	
+	}
+	
+	public String getDOB() {
+		
+			return DOB;
+		
+	}
+
+	public String getPhoneNumber() {
+	
+		return PhoneNumber;
+	
+	}
+}
+class Employees{
+	//EmployeeID,FirstName,LastName,DOB,DateOfEmployment,Wage
+	String EmployeeID;
+	String FirstName;
+	String LastName;
+	String DOB;
+	String DateOfEmployment;
+	String Wage;
+	
+	Employees (String EmployeeID, String FirstName , String LastName, String DOB, String DateOfEmployment, String Wage){
+		
+		this.EmployeeID = EmployeeID;
+		this.FirstName = FirstName;
+		this.LastName = LastName;
+		this.DOB = DOB;
+		this.DateOfEmployment = DateOfEmployment;
+		this.Wage = Wage;
+		
+		
+	}
+
+	public String getEmployeeID() {
+		
+		return EmployeeID;
+		
+	}
+	
+	public String getFirstName() {
+		
+		return FirstName;
+		
+	}
+
+	public String getLastName() {
+	
+		return LastName;
+	
+	}
+	
+	public String getDOB() {
+		
+			return DOB;
+		
+	}
+
+	public String getDateOfEmployment() {
+	
+		return DateOfEmployment;
+	
+	}
+	
+	public String getWage() {
+		
+		return Wage;
+	
+	}
+	
+	
+}
 class Cars{
 	
 	String CarID;
@@ -314,7 +425,7 @@ public class CarDB{
 				try{
 					
 					Class.forName("org.sqlite.JDBC");
-					con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
+					con = DriverManager.getConnection("jdbc:sqlite:/Users/cjlaptop/Desktop/UsedCars.DB");
 					
 					stmt = con.createStatement();
 					
@@ -402,7 +513,7 @@ public class CarDB{
 				try{
 						
 					Class.forName("org.sqlite.JDBC");
-					con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
+					con = DriverManager.getConnection("jdbc:sqlite:/Users/cjlaptop/Desktop/UsedCars.DB");
 						
 					stmt = con.createStatement();
 						
@@ -485,7 +596,7 @@ public class CarDB{
 				try{
 						
 					Class.forName("org.sqlite.JDBC");
-					con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
+					con = DriverManager.getConnection("jdbc:sqlite:/Users/cjlaptop/Desktop/UsedCars.DB");
 						
 					stmt = con.createStatement();
 						
@@ -573,7 +684,7 @@ public class CarDB{
 				try{
 						
 					Class.forName("org.sqlite.JDBC");
-					con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
+					con = DriverManager.getConnection("jdbc:sqlite:/Users/cjlaptop/Desktop/UsedCars.DB");
 						
 					stmt = con.createStatement();
 						
@@ -595,7 +706,195 @@ public class CarDB{
 			}
 		});
 	}
+public static void viewEmployees(String SortInput) {
+		
+		ArrayList<Employees> EmployeeTable = new ArrayList<Employees>();
+		String column[]= {"EmployeeID","FirstName","LastName","DOB","DateOfEmployment","Wage"};
+		String Query = null;
+		
+		//Connect to db and get table values
+		try{
+			
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:Users/cjlaptop/Desktop/UsedCars.db");
+			
+			stmt = con.createStatement();
+			
+			switch (SortInput) {
+				
+				case "All": Query = "SELECT * FROM Employees;";
+				break;
+			
+			} 
+			
+			ResultSet rs = stmt.executeQuery(Query);
+			
+			while(rs.next()) {
+				
+				Employees employee = new Employees(rs.getString("EmployeeID"),rs.getString("FirstName"),rs.getString("LastName"),rs.getString("DOB"),
+									rs.getString("DateOfEmployment"),rs.getString("Wage"));
+				
+				EmployeeTable.add(employee);
+				
+			}
+			
+			stmt.close();
+			con.close();
+
+		}
+				
+		catch ( Exception e ) {
+			    	  
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		 
+		}	
+			
+		JPanel panel = new JPanel();
+		JFrame frame = new JFrame("ViewEmployeeDataBase");
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
+		
+		String[] ComboBoxPatterns = {"All"};
+		JComboBox SortByForSale = new JComboBox(ComboBoxPatterns);
+		
+		JLabel ComboBoxTxt= new JLabel("You must look at all of the employees, you idiot");
+		JButton Update = new JButton();
+		Update.setText("Update");
+		
+		DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+		JTable table = new JTable(tableModel);
+		
+		
+		for (int i = 0; i < EmployeeTable.size(); i++) {
+			
+			String EmployeeID = EmployeeTable.get(i).getEmployeeID();
+			String FirstName = EmployeeTable.get(i).getFirstName();
+			String LastName = EmployeeTable.get(i).getLastName();
+			String DOB = EmployeeTable.get(i).getDOB();
+			String DateOfEmployment = EmployeeTable.get(i).getDateOfEmployment();
+			String Wage = EmployeeTable.get(i).getWage();
+			
+			
+			Object[] data = { EmployeeID, FirstName, LastName, DOB, 
+							  DateOfEmployment, Wage };
+			
+			tableModel.addRow(data);
+		}
 	
+		frame.add(new JScrollPane(table));
+		frame.add(ComboBoxTxt);
+		frame.add(SortByForSale);
+		frame.add(Update);
+		frame.add(panel);
+		frame.setSize(1000, 400);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		
+		Update.addActionListener(new ActionListener(){
+			
+			public void actionPerformed( ActionEvent e ){
+				
+				String ComboBoxInput = SortByForSale.getSelectedItem().toString();
+				viewCars(ComboBoxInput); 
+				frame.dispose();
+	        }  
+		});
+	}
+
+public static void viewCustomers(String SortInput) {
+	
+	ArrayList<Customers> CustomerTable = new ArrayList<Customers>();
+	String column[]= {"CustomerID","FirstName","LastName","DOB","PhoneNumber"};
+	String Query = null;
+	
+	//Connect to db and get table values
+	try{
+		
+		Class.forName("org.sqlite.JDBC");
+		con = DriverManager.getConnection("jdbc:sqlite:Users/cjlaptop/Desktop/UsedCars.db");
+		
+		stmt = con.createStatement();
+		
+		switch (SortInput) {
+			
+			case "All": Query = "SELECT * FROM Customers;";
+			break;
+		
+		} 
+		
+		ResultSet rs = stmt.executeQuery(Query);
+		
+		while(rs.next()) {
+			
+			Customers customer = new Customers(rs.getString("CustomerID"),rs.getString("FirstName"),rs.getString("LastName"),rs.getString("DOB"),
+								rs.getString("PhoneNumber"));
+			
+			CustomerTable.add(customer);
+			
+		}
+		
+		stmt.close();
+		con.close();
+
+	}
+			
+	catch ( Exception e ) {
+		    	  
+		System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		System.exit(0);
+	 
+	}	
+		
+	JPanel panel = new JPanel();
+	JFrame frame = new JFrame("ViewCustomerDataBase");
+	frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
+	
+	String[] ComboBoxPatterns = {"All"};
+	JComboBox SortByForSale = new JComboBox(ComboBoxPatterns);
+	
+	JLabel ComboBoxTxt= new JLabel("You must look at all of the customers, you idiot");
+	JButton Update = new JButton();
+	Update.setText("Update");
+	
+	DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+	JTable table = new JTable(tableModel);
+	
+	
+	for (int i = 0; i < CustomerTable.size(); i++) {
+		
+		String CustomerID = CustomerTable.get(i).getCustomerID();
+		String FirstName = CustomerTable.get(i).getFirstName();
+		String LastName = CustomerTable.get(i).getLastName();
+		String DOB = CustomerTable.get(i).getDOB();
+		String PhoneNumber = CustomerTable.get(i).getPhoneNumber();
+		
+		
+		
+		Object[] data = { CustomerID, FirstName, LastName, DOB, 
+						  PhoneNumber};
+		
+		tableModel.addRow(data);
+	}
+
+	frame.add(new JScrollPane(table));
+	frame.add(ComboBoxTxt);
+	frame.add(SortByForSale);
+	frame.add(Update);
+	frame.add(panel);
+	frame.setSize(1000, 400);
+	frame.setLocationRelativeTo(null);
+	frame.setVisible(true);
+	
+	Update.addActionListener(new ActionListener(){
+		
+		public void actionPerformed( ActionEvent e ){
+			
+			String ComboBoxInput = SortByForSale.getSelectedItem().toString();
+			viewCars(ComboBoxInput); 
+			frame.dispose();
+        }  
+	});
+}
 	public static void viewCars(String SortInput) {
 		
 		ArrayList<Cars> CarTable = new ArrayList<Cars>();
@@ -606,7 +905,7 @@ public class CarDB{
 		try{
 			
 			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
+			con = DriverManager.getConnection("jdbc:sqlite:/Users/cjlaptop/Desktop/UsedCars.DB");
 			
 			stmt = con.createStatement();
 			
@@ -720,7 +1019,7 @@ public class CarDB{
 		try{
 			
 			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:F:/School_Fall_Semester_2017/Database_Systems/UsedCars.db");
+			con = DriverManager.getConnection("jdbc:sqlite:/Users/cjlaptop/Desktop/UsedCars.DB");
 			
 			stmt = con.createStatement();
 		
@@ -786,4 +1085,3 @@ public class CarDB{
 		HomeView();
 		
 	}
-}
