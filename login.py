@@ -1,3 +1,5 @@
+
+###########Q for quit, hold e to snap a picture and get access
 import tkinter as tk
 import argparse
 import datetime
@@ -5,7 +7,7 @@ import cv2
 import os
 import face_recognition
 
-failure_max = 3
+failure_max = 5
 matched = 0
 passwords = [('cj', 'cw'), ('dad', 'dad'), ('mom', 'mom')]
 
@@ -71,6 +73,7 @@ def check_password(failures=[]):
 
                     face_names.append(name)
 
+
             process_this_frame = not process_this_frame
 
 
@@ -90,16 +93,17 @@ def check_password(failures=[]):
                 cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
                 font = cv2.FONT_HERSHEY_DUPLEX
                 cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-
-            # Display the resulting image
+            if cv2.waitKey(1) & 0xFF == ord('e'):
+                do_process()
+            #Display the resulting image
             cv2.imshow('Video', frame)
+
+
 
 
             # Hit 'q' on the keyboard to quit!
 
-            if matched == 1 & cv2.waitKey(0) & 0xFF == ord('q'):
-                print("access granted")
-                #do_process()
+            if cv2.waitKey(0) & 0xFF == ord('q'):
                 break
 
         return
@@ -114,18 +118,14 @@ def check_password(failures=[]):
 
 #make a text file if both login and face recognition work
 def do_process():
-    b = input("What would you like your text file named?")
-    f = open(b+".txt", "w+")
-    for i in range(10):
-        f.write("This is line %d\r\n" % (i + 1))
-    f.close()
+    print("Access granted!")
 if cv2.waitKey(1) & 0xFF == ord('w') & matched == 1:
     do_process()
 
 
 
 root = tk.Tk()
-root.geometry('300x160')
+root.geometry('800x600')
 root.title('Enter your information')
 # frame for window margin
 parent = tk.Frame(root, padx=10, pady=10)
